@@ -20,10 +20,10 @@ export const oauthRedirectHandler =
       } as any
       if(ret.id){
         const context = await get(`context_${ret.request_id || ret.id}`);
-        ret.scheme = context.scheme,
-        ret.oauth_referral_source = context.oauth_referral_source;
-        ret.session_id = context.session_id;
-        ret.user_id = context.user_id
+        ret.scheme = context?.scheme,
+        ret.oauth_referral_source = context?.oauth_referral_source;
+        ret.session_id = context?.session_id;
+        ret.user_id = context?.user_id
       }
       const metadata = JSON.stringify({
         aggregator, 
@@ -42,7 +42,7 @@ export const oauthRedirectHandler =
         member_guid: ret?.id,
       };
       
-      const oauthParams =  new RegExp(Object.keys(queries).map(r => `\\$${r}`).join('|'), 'g');
+      const oauthParams = new RegExp(Object.keys(queries).map(r => `\\$${r}`).join('|'), 'g');
       function mapOauthParams(queries: any, res: Response, html: string){
         res.send(html.replaceAll(oauthParams, q => queries[q.substring(1)] || ''));
         // res.send(queries)

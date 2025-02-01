@@ -55,6 +55,7 @@
     "joi": "^17.13.3",
     "js-logger": "^1.6.1",
     "mx-platform-node": "^0.42.0",
+    "prettier": "^3.4.2",
     "redis": "^4.6.12",
     "set-interval-async": "^3.0.3",
     "stream-browserify": "^3.0.0",
