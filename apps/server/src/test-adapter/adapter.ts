@@ -253,12 +253,21 @@ export class TestAdapter implements WidgetAdapter {
   }
 
   async HandleOauthResponse(request: any): Promise<Connection>{
-    return {
-      aggregator: this.aggregator,
-      id: request.state,
-      cur_job_id: "testJobId",
-      status: ConnectionStatus.CONNECTED,
-      challenges: [],
-    };
+    const { state: request_id, code } = request;
+    console.log('redis about to get ' + request_id)
+    const connection = await get(request_id);
+    console.log(request_id, connection)
+    if (!connection) {
+      return null;
+    }
+    if (code) {
+      connection.status = ConnectionStatus.CONNECTED;
+      connection.user_id = code;
+      connection.request_id = request_id;
+    }
+    // console.log(connection)
+    await set(request_id, connection);
+
+    return connection;
   }
 }

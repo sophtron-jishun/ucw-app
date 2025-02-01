@@ -9,6 +9,7 @@ import {
   testRouteHandlers,
 } from "./constants";
 import { MappedJobTypes } from "../shared/contract";
+import { get, set } from "../services/storageClient/redis";
 
 const labelText = "testLabelText";
 const aggregator = "aggregator";
@@ -24,8 +25,6 @@ const testAdapterB = new TestAdapter({
   routeHandlers: testRouteHandlers,
   dataRequestValidators: testDataRequestValidators,
 });
-
-jest.mock("../services/storageClient/redis");
 
 const successConnectionStatus = {
   aggregator,
@@ -342,4 +341,26 @@ describe("TestAdapter", () => {
       );
     });
   });
+  describe("HandleOauthResponse", () => {
+    it("responds success from HandleOauthResponse", async () => {
+      await set(`request_id`, {
+        guid: 'test_guid',
+        id: 'request_id'
+      });
+  
+      const ret = await testAdapterA.HandleOauthResponse({
+        state: 'request_id',
+        code: 'test_code'
+      });
+  
+      expect(ret).toEqual({
+          id: "request_id",
+          request_id: "request_id",
+          guid: 'test_guid',
+          user_id: 'test_code',
+          status: 6
+        })
+    });
+  });
 });
+

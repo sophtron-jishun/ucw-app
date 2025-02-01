@@ -1,4 +1,4 @@
-jest.mock("../services/storageClient/redis", () => jest.requireActual('../__mocks__/redis'));
+import { get, set } from "../services/storageClient/redis";
 import type { Response, Request } from "express";
 import { ConnectApi } from "./connectApi";
 import { webhookHandler, oauthRedirectHandler } from "./oauthEndpoints";
@@ -8,8 +8,8 @@ import {
 import {
   oauthSuccessResponse,
 } from "./testData/oauth";
-import { get, set } from "../services/storageClient/redis";
 import {format} from 'prettier'
+
 
 const context = {
   aggregator: TEST_EXAMPLE_A_AGGREGATOR_STRING,
@@ -17,6 +17,7 @@ const context = {
 let connect: ConnectApi;
 
 describe("oauthtHandler", () => {
+
   beforeEach(async () => {
     connect = new ConnectApi({
       context,
@@ -25,6 +26,8 @@ describe("oauthtHandler", () => {
   });
 
   it("responds success from oauthRedirectHandler", async () => {
+    jest.mock("../services/storageClient/redis", () => jest.requireActual('../__mocks__/redis'));
+
     const req = {
       connectApi: connect,
       params: {
@@ -33,15 +36,22 @@ describe("oauthtHandler", () => {
       },
       query: {
         state: 'request_id',
-        code: 'success',
+        code: 'test_code',
       },
     } as unknown as Request;
+
+    await set(`request_id`, {
+      guid: 'test_guid',
+      id: 'request_id'
+    });
+
     await set(`context_request_id`, {
       scheme: 'scheme',
       oauth_referral_source: 'oauth_referral_source',
       session_id: 'session_id',
       user_id: 'user_id'
     });
+
     const res = {
       send: jest.fn(),
       status: jest.fn(),
@@ -55,11 +65,13 @@ describe("oauthtHandler", () => {
   });
 
   it("responds error from oauthRedirectHandler if agreggator does not exist", async () => {
+
     const connect = new ConnectApi({
       context: {
         aggregator: "junk",
       },
     });
+
     await connect.init();
 
     const req = {
@@ -72,12 +84,14 @@ describe("oauthtHandler", () => {
         state: 'request_id',
       },
     } as unknown as Request;
+
     await set(`context_request_id`, {
       scheme: 'scheme',
       oauth_referral_source: 'oauth_referral_source',
       session_id: 'session_id',
       user_id: 'user_id'
     });
+
     const res = {
       send: jest.fn(),
       status: jest.fn(),
@@ -93,10 +107,12 @@ describe("webhookHandler", () => {
     connect = new ConnectApi({
       context,
     });
+
     await connect.init();
   });
 
   it("responds success from webhookHandler", async () => {
+    jest.mock("../services/storageClient/redis", () => jest.requireActual('../__mocks__/redis'));
     const req = {
       connectApi: connect,
       params: {
@@ -105,29 +121,36 @@ describe("webhookHandler", () => {
       },
       query: {
         state: 'request_id',
-        code: 'success',
+        code: 'test_code',
       },
     } as unknown as Request;
+
     await set(`context_request_id`, {
       scheme: 'scheme',
       oauth_referral_source: 'oauth_referral_source',
       session_id: 'session_id',
       user_id: 'user_id'
     });
+
+    await set(`request_id`, {
+      guid: 'test_guid',
+      id: 'request_id'
+    });
+
     const res = {
       send: jest.fn(),
       status: jest.fn(),
     } as unknown as any;
 
     await webhookHandler(req, res);
+
     expect(res.send).toHaveBeenCalledWith({
-        aggregator: "testExampleA",
-        challenges: [],
-        cur_job_id: "testJobId",
         id: "request_id",
+        request_id: "request_id",
+        guid: 'test_guid',
+        user_id: 'test_code',
         status: 6
       })
-
   });
 
   it("responds error from webhookHandler if agreggator does not exist", async () => {
@@ -136,6 +159,7 @@ describe("webhookHandler", () => {
         aggregator: "junk",
       },
     });
+
     await connect.init();
 
     const req = {
@@ -148,18 +172,21 @@ describe("webhookHandler", () => {
         state: 'request_id',
       },
     } as unknown as Request;
+
     await set(`context_request_id`, {
       scheme: 'scheme',
       oauth_referral_source: 'oauth_referral_source',
       session_id: 'session_id',
       user_id: 'user_id'
     });
+
     const res = {
       send: jest.fn(),
       status: jest.fn(),
     } as unknown as any;
 
     await webhookHandler(req, res);
+
     expect(res.send).toHaveBeenCalledWith('Error')
   });
 });

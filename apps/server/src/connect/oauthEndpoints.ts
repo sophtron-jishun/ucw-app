@@ -20,7 +20,7 @@ export const oauthRedirectHandler =
       } as any
       if(ret.id){
         const context = await get(`context_${ret.request_id || ret.id}`);
-        ret.scheme = context?.scheme,
+        ret.scheme = context?.scheme
         ret.oauth_referral_source = context?.oauth_referral_source;
         ret.session_id = context?.session_id;
         ret.user_id = context?.user_id
