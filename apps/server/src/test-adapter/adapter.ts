@@ -253,10 +253,12 @@ export class TestAdapter implements WidgetAdapter {
   }
 
   async HandleOauthResponse(request: any): Promise<Connection>{
-    const { state: request_id, code } = request;
-    console.log('redis about to get ' + request_id)
+    const { query } = request;
+    if( !query ){
+      return null;
+    }
+    const { state: request_id, code } = query;
     const connection = await get(request_id);
-    console.log(request_id, connection)
     if (!connection) {
       return null;
     }

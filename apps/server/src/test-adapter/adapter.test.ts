@@ -349,8 +349,10 @@ describe("TestAdapter", () => {
       });
   
       const ret = await testAdapterA.HandleOauthResponse({
-        state: 'request_id',
-        code: 'test_code'
+        query: {
+          state: 'request_id',
+          code: 'test_code'
+        }
       });
   
       expect(ret).toEqual({

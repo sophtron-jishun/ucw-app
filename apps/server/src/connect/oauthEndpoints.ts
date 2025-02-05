@@ -13,7 +13,7 @@ export const oauthRedirectHandler =
     const { userId, aggregator } = req.params;
     try {
       const aggregatorAdapter = createAggregatorWidgetAdapter(aggregator);
-      const oauth_res = await aggregatorAdapter.HandleOauthResponse({...req.query, ...req.params, ...req.body})
+      const oauth_res = await aggregatorAdapter.HandleOauthResponse({query: req.query, params: req.params, body: req.body})
       const ret = {
         ...oauth_res,
         aggregator
@@ -34,7 +34,7 @@ export const oauthRedirectHandler =
         session_guid: ret.session_id,
       });
       const app_url = `${ret?.scheme}://oauth_complete?metadata=${encodeURIComponent(metadata)}`
-      const queries = {
+      const queries : any = {
         status: ret?.status === ConnectionStatus.CONNECTED ? 'success': 'error',
         app_url,
         redirect: ret?.oauth_referral_source?.toLowerCase() === 'browser' ? `false`: 'true',
@@ -43,10 +43,6 @@ export const oauthRedirectHandler =
       };
       
       const oauthParams = new RegExp(Object.keys(queries).map(r => `\\$${r}`).join('|'), 'g');
-      function mapOauthParams(queries: any, res: Response, html: string){
-        res.send(html.replaceAll(oauthParams, q => queries[q.substring(1)] || ''));
-        // res.send(queries)
-      }
       const htmlFile = ret?.error ? 'error' : 'success'
       const filePath = path.join(__dirname, `../infra/http/oauth/${htmlFile}.html`)
       const html: string = await new Promise((resolve, reject) => {
@@ -61,7 +57,7 @@ export const oauthRedirectHandler =
           }
         );
       }) 
-      mapOauthParams(queries, res, html);
+      res.send(html.replaceAll(oauthParams, q => queries[q.substring(1)] || ''));
     } catch (error) {
       logger.error('Oauth redirect error', error)
       res.status(400);
@@ -78,7 +74,7 @@ export const webhookHandler =
       const aggregatorAdapter = createAggregatorWidgetAdapter(aggregator);
       logger.info(`received web hook at: ${req.path}`, req.query)
       //console.log(req.body)
-      const ret = await aggregatorAdapter.HandleOauthResponse({...req.query, ...req.params, ...req.body})
+      const ret = await aggregatorAdapter.HandleOauthResponse({query: req.query, params: req.params, body: req.body})
       res.send(ret);
     } catch (error) {
       logger.error('Oauth redirect error', error)

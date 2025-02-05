@@ -186,4 +186,8 @@ export default function (app) {
   app.all('/webhook/:aggregator/*', webhookHandler)
 
   app.get('/oauth/:aggregator/redirect_from/', oauthRedirectHandler)
+  
+  app.get('/oauth/oauth.js', (req, res) => {
+    res.sendFile('infra/http/oath/oauth.js')
+  })
 }
