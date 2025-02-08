@@ -163,7 +163,6 @@ export async function search(
   const preferences = await getPreferences();
   const hiddenInstitutions = preferences?.hiddenInstitutions || [];
   const supportedAggregators = preferences?.supportedAggregators || [];
-
   const { body }: { body: SearchResponse } = await ElasticsearchClient.search({
     index: "institutions",
     body: {

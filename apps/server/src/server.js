@@ -1,3 +1,4 @@
+import "dotenv/config";
 import config from "./config";
 import ngrok from "@ngrok/ngrok";
 import cookieParser from "cookie-parser";
@@ -81,6 +82,11 @@ app.get("*", (req, res) => {
   req.metricsPath = "/catchall";
   res.sendStatus(404);
 });
+
+if(!config.PORT){
+  console.log(config)
+  throw new Error('Invalid config, unable to start server')
+}
 
 app.listen(config.PORT, () => {
   const message = `Server is running on port ${config.PORT}, ENV: ${config.ENV}, LOG_LEVEL: ${config.LOG_LEVEL}`;

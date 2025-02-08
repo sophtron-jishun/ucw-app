@@ -20,3 +20,5 @@ function handle_oauth(redirect, app_url, post_message, member_guid, error_reason
     })
   }
 }
+
+module.exports = handle_oauth
