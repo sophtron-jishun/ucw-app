@@ -1,4 +1,3 @@
-const { GoalsApi } = require('mx-platform-node')
 const handle_oauth = require('./oauth')
 global.window = {
   location: '',
