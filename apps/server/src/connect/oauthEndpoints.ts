@@ -12,38 +12,34 @@ export const oauthRedirectHandler =
   async (req: Request, res: Response) => {
     const { userId, aggregator } = req.params;
     try {
-      const aggregatorAdapter = createAggregatorWidgetAdapter(aggregator);
-      const oauth_res = await aggregatorAdapter.HandleOauthResponse({query: req.query, params: req.params, body: req.body})
-      const ret = {
-        ...oauth_res,
-        aggregator
-      } as any
-      if(ret.id){
-        const context = await get(`context_${ret.request_id || ret.id}`);
-        ret.scheme = context?.scheme
-        ret.oauth_referral_source = context?.oauth_referral_source;
-        ret.session_id = context?.session_id;
-        ret.user_id = context?.user_id
+      const aggregatorAdapter = createAggregatorWidgetAdapter({aggregator});
+      const oauth_res : any = (await aggregatorAdapter.HandleOauthResponse({query: req.query, params: req.params, body: req.body})) || {}
+      const queries : any = {}
+      if(oauth_res.id){
+        const context = await get(`context_${oauth_res.request_id || oauth_res.id}`);
+        oauth_res.scheme = context?.scheme
+        oauth_res.oauth_referral_source = context?.oauth_referral_source;
+        oauth_res.session_id = context?.session_id;
+        oauth_res.user_id = context?.user_id
+
+        const metadata = JSON.stringify({
+          aggregator, 
+          id: oauth_res.id, 
+          member_guid: oauth_res.id, 
+          user_guid: oauth_res.user_id,
+          error_reason: oauth_res.error, 
+          session_guid: oauth_res.session_id,
+        });
+
+        queries.status = oauth_res.status === ConnectionStatus.CONNECTED ? 'success': 'error';
+        queries.app_url = `${oauth_res.scheme}://oauth_complete?metadata=${encodeURIComponent(metadata)}`;
+        queries.redirect = oauth_res.oauth_referral_source?.toLowerCase() === 'browser' ? `false`: 'true';
+        queries.error_reason = oauth_res.error;
+        queries.member_guid = oauth_res.id;
       }
-      const metadata = JSON.stringify({
-        aggregator, 
-        id: ret.id, 
-        member_guid: ret.id, 
-        user_guid: ret.user_id,
-        error_reason: ret.error, 
-        session_guid: ret.session_id,
-      });
-      const app_url = `${ret?.scheme}://oauth_complete?metadata=${encodeURIComponent(metadata)}`
-      const queries : any = {
-        status: ret?.status === ConnectionStatus.CONNECTED ? 'success': 'error',
-        app_url,
-        redirect: ret?.oauth_referral_source?.toLowerCase() === 'browser' ? `false`: 'true',
-        error_reason: ret?.error,
-        member_guid: ret?.id,
-      };
       
       const oauthParams = new RegExp(Object.keys(queries).map(r => `\\$${r}`).join('|'), 'g');
-      const htmlFile = ret?.error ? 'error' : 'success'
+      const htmlFile = oauth_res?.error ? 'error' : 'success'
       const filePath = path.join(__dirname, `../infra/http/oauth/${htmlFile}.html`)
       const html: string = await new Promise((resolve, reject) => {
         fs.readFile(
@@ -71,9 +67,8 @@ export const webhookHandler =
     const { aggregator } = req.params;
 
     try {
-      const aggregatorAdapter = createAggregatorWidgetAdapter(aggregator);
+      const aggregatorAdapter = createAggregatorWidgetAdapter({aggregator});
       logger.info(`received web hook at: ${req.path}`, req.query)
-      //console.log(req.body)
       const ret = await aggregatorAdapter.HandleOauthResponse({query: req.query, params: req.params, body: req.body})
       res.send(ret);
     } catch (error) {

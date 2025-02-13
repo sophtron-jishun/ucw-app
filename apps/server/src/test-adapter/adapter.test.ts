@@ -363,6 +363,23 @@ describe("TestAdapter", () => {
           status: 6
         })
     });
+    
+    it("returns null with no query", async () => {
+      const ret = await testAdapterA.HandleOauthResponse({
+        query: null
+      });
+      expect(ret).toEqual(null)
+    });
+
+    it("returns null with no data", async () => {
+      const ret = await testAdapterA.HandleOauthResponse({
+        query: {
+          state: 'request_id',
+          code: 'test_code'
+        }
+      });
+      expect(ret).toEqual(null)
+    });
   });
 });
 

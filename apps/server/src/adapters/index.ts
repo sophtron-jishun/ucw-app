@@ -63,8 +63,11 @@ export class AggregatorAdapterBase {
     try {
       if (this.context?.aggregator) {
         this.aggregatorAdapter = createAggregatorWidgetAdapter(
-          this.context?.aggregator as Aggregator,
-          token //use the auth token as sessionId, 
+          {
+            aggregator: this.context?.aggregator as Aggregator,
+            sessionId: token //use the auth token as sessionId, 
+          }
+          
         );
       }
       this.aggregators = aggregators;

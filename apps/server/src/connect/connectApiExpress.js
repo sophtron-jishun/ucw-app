@@ -188,6 +188,6 @@ export default function (app) {
   app.get('/oauth/:aggregator/redirect_from/', oauthRedirectHandler)
   
   app.get('/oauth/oauth.js', (req, res) => {
-    res.sendFile('infra/http/oath/oauth.js')
+    res.sendFile(path.join(__dirname, "../infra/http/oauth/oauth.js"))
   })
 }

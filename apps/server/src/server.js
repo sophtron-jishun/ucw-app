@@ -84,7 +84,6 @@ app.get("*", (req, res) => {
 });
 
 if(!config.PORT){
-  console.log(config)
   throw new Error('Invalid config, unable to start server')
 }
 

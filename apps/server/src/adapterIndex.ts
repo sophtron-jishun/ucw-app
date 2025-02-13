@@ -4,8 +4,13 @@ import type { Aggregator } from "./adapterSetup";
 import { adapterMap } from "./adapterSetup";
 
 export function createAggregatorWidgetAdapter(
-  aggregator: Aggregator,
-  sessionId?: string | undefined
+  {
+    aggregator, 
+    sessionId
+  } : {
+    aggregator: Aggregator, 
+    sessionId?: string | undefined
+  }
 ): WidgetAdapter {
   const createWidgetAdapter =
     adapterMap[aggregator as keyof typeof adapterMap]?.createWidgetAdapter;
