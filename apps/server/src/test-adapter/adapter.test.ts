@@ -150,7 +150,10 @@ describe("TestAdapter", () => {
 
   describe("CreateConnection", () => {
     it("returns a response object", async () => {
-      expect(await testAdapterA.CreateConnection(undefined, "test")).toEqual({
+      expect(await testAdapterA.CreateConnection({
+        institution_id: 'institution_id',
+        credentials: []
+      }, "test")).toEqual({
         id: "testId",
         cur_job_id: "testJobId",
         institution_code: "testCode",
