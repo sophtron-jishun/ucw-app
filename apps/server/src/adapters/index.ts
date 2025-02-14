@@ -56,8 +56,8 @@ export class AggregatorAdapterBase {
     this.context = req.context;
   }
 
-  async init({authToken = "default_token"} : {authToken?: string | undefined} = {}) {
-
+  async init() {
+    const authToken = this.context?.auth?.token || 'default_token';
     this.analyticsClient = new AnalyticsClient(authToken);
     try {
       if (this.context?.aggregator) {
