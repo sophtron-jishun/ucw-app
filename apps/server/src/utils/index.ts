@@ -32,6 +32,7 @@ export function mapJobType(input: JobTypes) {
     case JobTypes.IDENTITY:
       return MappedJobTypes.IDENTITY;
     default:
-      throw new Error("Invalid job type");
+      return input;
+      //throw new Error("Invalid job type");
   }
 }
