@@ -169,7 +169,7 @@ export async function search(
         bool: {
           should: fuzzySearchTermQuery(searchTerm),
           minimum_should_match: 1,
-          must: mustQuery(supportedAggregators, jobType),
+          // must: mustQuery(supportedAggregators, jobType),
           must_not: buildMustNotQuery(hiddenInstitutions),
         },
       },

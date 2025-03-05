@@ -63,15 +63,16 @@ function aggregatorSupportsJobType({
   jobType: MappedJobTypes;
   shouldRequireFullSupport: boolean;
 }): boolean {
-  return (
-    shouldRequireFullSupport
-      ? JOB_TYPE_FULL_SUPPORT_MAP
-      : JOB_TYPE_PARTIAL_SUPPORT_MAP
-  )[jobType].reduce((acc, supportsProp) => {
-    return (
-      acc &&
-      institutionAttributes?.[supportsProp as keyof InstitutionAggregator] ===
-        true
-    );
-  }, true);
+  return true;
+  // return (
+  //   shouldRequireFullSupport
+  //     ? JOB_TYPE_FULL_SUPPORT_MAP
+  //     : JOB_TYPE_PARTIAL_SUPPORT_MAP
+  // )[jobType].reduce((acc, supportsProp) => {
+  //   return (
+  //     acc &&
+  //     institutionAttributes?.[supportsProp as keyof InstitutionAggregator] ===
+  //       true
+  //   );
+  // }, true);
 }

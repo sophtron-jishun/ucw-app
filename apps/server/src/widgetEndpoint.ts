@@ -50,7 +50,7 @@ export const widgetHandler = (req: Request, res: Response) => {
     connection_id: Joi.string(),
     institution_id: Joi.string(),
     job_type: Joi.string()
-      .valid(...Object.values(JobTypes))
+      //.valid(...Object.values(JobTypes))
       .required(),
     aggregator: Joi.string().valid(...aggregators),
     single_account_select: Joi.bool(),
