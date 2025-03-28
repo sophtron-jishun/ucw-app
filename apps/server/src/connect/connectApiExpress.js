@@ -22,7 +22,6 @@ import { jobsRouteHandler } from "./jobEndpoints";
 const disableAnalytics = true;
 
 export default function (app) {
-  stubs(app);
   app.use(contextHandler);
   app.use(async (req, res, next) => {
     if (
@@ -42,6 +41,8 @@ export default function (app) {
     }
     next();
   });
+  
+  stubs(app);
 
   app.get("/oauth_redirect", (req, res) => {
     res.sendFile(path.join(__dirname, "../infra/http/oauth.html"));

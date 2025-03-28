@@ -18,7 +18,10 @@ export default function (app) {
     res.send(require('./stubs/transaction_rules.js'))
   })
   app.get('/raja/data', async (req, res) => {
-    res.send(require('./stubs/data_master.js'))
+    const data = require('./stubs/data_master.js');
+    data.user_profile.guid = req.context.user_id
+    data.user_profile.user_guid = req.context.resolved_user_id
+    res.send(data)
   })
   app.get('/raja/extend_session', async (req, res) => {
     res.sendStatus(200)

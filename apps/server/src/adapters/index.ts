@@ -110,19 +110,23 @@ export class AggregatorAdapterBase {
   }
 
   async getConnection(connection_id: string): Promise<Connection> {
-    return await this.aggregatorAdapter.GetConnectionById(
+    const ret = await this.aggregatorAdapter.GetConnectionById(
       connection_id,
       this.getUserId(),
     );
+    ret.user_id = ret.user_id || this.getUserId()
+    return ret
   }
 
   async getConnectionStatus(connection_id: string): Promise<Connection> {
-    return await this.aggregatorAdapter.GetConnectionStatus(
+    const ret = await this.aggregatorAdapter.GetConnectionStatus(
       connection_id,
       this.context.current_job_id,
       this.context.single_account_select,
       this.getUserId(),
     );
+    ret.user_id = ret.user_id || this.getUserId()
+    return ret;
   }
 
   async createConnection(
@@ -141,6 +145,7 @@ export class AggregatorAdapterBase {
         scheme: this.context.scheme,
       });
     }
+    ret.user_id = ret.user_id || this.getUserId()
     return ret;
   }
 
@@ -159,6 +164,7 @@ export class AggregatorAdapterBase {
         scheme: this.context.scheme,
       });
     }
+    ret.user_id = ret.user_id || this.getUserId()
     return ret;
   }
 
