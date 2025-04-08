@@ -1,10 +1,7 @@
 {
   "defaultAggregator": "aggregator1",
 
-  "supportedAggregators": [
-    "aggregator1",
-    "aggregator2"
-  ],
+  "supportedAggregators": ["mx", "sophtron", "akoya", "testExampleA", "testExampleB"],
 
   "defaultAggregatorVolume": {
     "aggregator1": 70,

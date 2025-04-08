@@ -41,6 +41,7 @@
     "@types/uuid": "^9.0.8",
     "@ucp-npm/mx-adapter": "^2.1.2",
     "@ucp-npm/sophtron-adapter": "^2.0.0",
+    "@ucp-npm/akoya-adapter": "https://github.com/sophtron-jishun/ucp-npm/raw/refs/heads/master/ucw-adapter-akoya/ucp-npm-akoya-adapter-0.0.1-alpha.tgz",
     "assert-browserify": "^2.0.0",
     "axios": "^1.6.8",
     "buffer-browserify": "^0.2.5",
