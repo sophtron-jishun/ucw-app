@@ -1,2 +1,2 @@
-export const apiEndpoint = "https://api.sophtron.com/api";
-export const vcEndpoint = "https://vc.sophtron.com/api";
+export const apiEndpoint = "https://api.sophtron-prod.com/api";
+export const vcEndpoint = "https://vc.sophtron-prod.com/api";

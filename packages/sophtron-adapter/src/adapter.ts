@@ -42,12 +42,12 @@ export class SophtronAdapter implements WidgetAdapter {
   RouteHandlers = {};
 
   constructor(args: AdapterConfig) {
-    const { dependencies } = args;
+    const { dependencies, sessionInfo } = args;
 
     this.logClient = dependencies.logClient;
     this.envConfig = dependencies.envConfig;
-    this.apiClient = new SophtronClient(dependencies);
-    this.apiClientV1 = new SophtronClientV1(dependencies);
+    this.apiClient = new SophtronClient(dependencies, sessionInfo);
+    this.apiClientV1 = new SophtronClientV1(dependencies, sessionInfo);
   }
 
   DataRequestValidators = {
@@ -238,7 +238,7 @@ export class SophtronAdapter implements WidgetAdapter {
             jobType.indexOf("verify") >= 0)
         ) {
           const accounts =
-            await this.apiClientV1.getUserInstitutionAccounts(memberId);
+            await this.apiClient.getMemberAccounts(userId, memberId);
           challenge.id = "single_account_select";
           challenge.external_id = "single_account_select";
           challenge.type = ChallengeType.OPTIONS;

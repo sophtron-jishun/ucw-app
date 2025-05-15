@@ -2,6 +2,7 @@ import type { VCDataTypes, WidgetAdapter } from "@repo/utils";
 import { info } from "./infra/logger";
 import type { Aggregator } from "./adapterSetup";
 import { adapterMap } from "./adapterSetup";
+import type { Context } from "./shared/contract";
 
 export const getAggregatorIdFromTestAggregatorId = (testId: string) => {
   const aggregatorId = Object.entries(adapterMap).find(
@@ -14,14 +15,16 @@ export const getAggregatorIdFromTestAggregatorId = (testId: string) => {
 
 export function createAggregatorWidgetAdapter({
   aggregator,
+  context
 }: {
   aggregator: Aggregator;
+  context?: Context
 }): WidgetAdapter {
   const createWidgetAdapter =
     adapterMap[aggregator as keyof typeof adapterMap]?.createWidgetAdapter;
 
   if (createWidgetAdapter) {
-    return createWidgetAdapter();
+    return createWidgetAdapter({sessionInfo: context});
   }
 
   throw new Error(`Unsupported aggregator ${aggregator}`);

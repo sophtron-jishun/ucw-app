@@ -20,6 +20,9 @@ export function contextHandler(
   let context = {} as Context;
   if (req.headers.meta?.length > 0) {
     context = JSON.parse(req.headers.meta as string);
+    if(!context.authorization && req.headers.authorization){
+      context.authorization = req.headers.authorization
+    }
   }
 
   res.context = context;

@@ -39,6 +39,10 @@ export default class SophtronV2Client extends SophtronBaseClient {
     return await this.get(`/v2/customers/${customerId}/members/${memberId}`);
   }
 
+  async getMemberAccounts(customerId: string, memberId: string) {
+    return await this.get(`/v2/customers/${customerId}/members/${memberId}/accounts`);
+  }
+
   async createMember(
     customerId: string,
     jobTypes: ComboJobTypes[],

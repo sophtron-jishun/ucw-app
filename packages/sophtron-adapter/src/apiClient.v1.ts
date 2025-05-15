@@ -4,47 +4,47 @@ import SophtronBaseClient from "./apiClient.base";
 export default class SophtronClient extends SophtronBaseClient {
   async getUserIntegrationKey() {
     const data = { Id: this.apiConfig.clientId };
-    return await this.post("/User/GetUserIntegrationKey", data);
+    return await this.postLegacy("/User/GetUserIntegrationKey", data);
   }
 
   async getUserInstitutionById(id: string) {
-    return await this.post("/UserInstitution/GetUserInstitutionByID", {
+    return await this.postLegacy("/UserInstitution/GetUserInstitutionByID", {
       UserInstitutionID: id,
     });
   }
 
   // getUserInstitutionsByUser(id: string) {
-  //   return this.post('/UserInstitution/GetUserInstitutionsByUser', { UserID: id });
+  //   return this.postLegacy('/UserInstitution/GetUserInstitutionsByUser', { UserID: id });
   // }
   async deleteUserInstitution(id: string) {
-    return await this.post("/UserInstitution/DeleteUserInstitution", {
+    return await this.postLegacy("/UserInstitution/DeleteUserInstitution", {
       UserInstitutionID: id,
     });
   }
 
   async getUserInstitutionAccounts(userInstitutionID: string) {
-    return await this.post("/UserInstitution/GetUserInstitutionAccounts", {
+    return await this.postLegacy("/UserInstitution/GetUserInstitutionAccounts", {
       UserInstitutionID: userInstitutionID,
     });
   }
 
   async getInstitutionById(id: string) {
     const data = { InstitutionID: id };
-    return await this.post("/Institution/GetInstitutionByID", data);
+    return await this.postLegacy("/Institution/GetInstitutionByID", data);
   }
 
   async getInstitutionByRoutingNumber(number: string) {
-    return await this.post("/Institution/GetInstitutionByRoutingNumber", {
+    return await this.postLegacy("/Institution/GetInstitutionByRoutingNumber", {
       RoutingNumber: number,
     });
   }
 
   async getJob(id: string) {
-    return await this.post("/Job/GetJobInformationByID", { JobID: id });
+    return await this.postLegacy("/Job/GetJobInformationByID", { JobID: id });
   }
 
   async jobSecurityAnswer(jobId: string, answer: string) {
-    const ret = await this.post("/Job/UpdateJobSecurityAnswer", {
+    const ret = await this.postLegacy("/Job/UpdateJobSecurityAnswer", {
       JobID: jobId,
       SecurityAnswer: JSON.stringify(answer),
     });
@@ -57,7 +57,7 @@ export default class SophtronClient extends SophtronBaseClient {
     tokenInput: string,
     verifyPhoneFlag: boolean,
   ) {
-    const ret = await this.post("/Job/UpdateJobTokenInput", {
+    const ret = await this.postLegacy("/Job/UpdateJobTokenInput", {
       JobID: jobId,
       TokenChoice: tokenChoice,
       TokenInput: tokenInput,
@@ -67,7 +67,7 @@ export default class SophtronClient extends SophtronBaseClient {
   }
 
   async jobCaptchaInput(jobId: string, input: string) {
-    const ret = await this.post("/Job/UpdateJobCaptchaInput", {
+    const ret = await this.postLegacy("/Job/UpdateJobCaptchaInput", {
       JobID: jobId,
       CaptchaInput: input,
     });
@@ -86,7 +86,7 @@ export default class SophtronClient extends SophtronBaseClient {
       InstitutionID: institutionId,
       UserID: this.apiConfig.clientId,
     };
-    return await this.post(url, data);
+    return await this.postLegacy(url, data);
   }
 
   async createUserInstitutionWithProfileInfo(
@@ -101,7 +101,7 @@ export default class SophtronClient extends SophtronBaseClient {
       InstitutionID: institutionId,
       UserID: this.apiConfig.clientId,
     };
-    return await this.post(url, data);
+    return await this.postLegacy(url, data);
   }
 
   async createUserInstitutionWithAllPlusProfile(
@@ -116,7 +116,7 @@ export default class SophtronClient extends SophtronBaseClient {
       InstitutionID: institutionId,
       UserID: this.apiConfig.clientId,
     };
-    return await this.post(url, data);
+    return await this.postLegacy(url, data);
   }
 
   async createUserInstitutionWithFullHistory(
@@ -131,7 +131,7 @@ export default class SophtronClient extends SophtronBaseClient {
       InstitutionID: institutionId,
       UserID: this.apiConfig.clientId,
     };
-    return await this.post(url, data);
+    return await this.postLegacy(url, data);
   }
 
   async createUserInstitutionWithFullAccountNumbers(
@@ -146,7 +146,7 @@ export default class SophtronClient extends SophtronBaseClient {
       InstitutionID: institutionId,
       UserID: this.apiConfig.clientId,
     };
-    return await this.post(url, data);
+    return await this.postLegacy(url, data);
   }
 
   async createUserInstitutionWOJob(
@@ -155,7 +155,7 @@ export default class SophtronClient extends SophtronBaseClient {
     institutionId: string,
   ) {
     const url = "/UserInstitution/CreateUserInstitutionWOJob";
-    return await this.post(url, {
+    return await this.postLegacy(url, {
       UserName: username,
       Password: password,
       InstitutionID: institutionId,
@@ -168,7 +168,7 @@ export default class SophtronClient extends SophtronBaseClient {
     userInstitutionID: string,
   ) {
     const url = "/UserInstitution/UpdateUserInstitution";
-    return await this.post(url, {
+    return await this.postLegacy(url, {
       UserName: username,
       Password: password,
       UserInstitutionID: userInstitutionID,
@@ -177,7 +177,7 @@ export default class SophtronClient extends SophtronBaseClient {
 
   async getUserInstitutionProfileInfor(userInstitutionID: string) {
     const url = "/UserInstitution/GetUserInstitutionProfileInfor";
-    return await this.post(url, { UserInstitutionID: userInstitutionID }).then(
+    return await this.postLegacy(url, { UserInstitutionID: userInstitutionID }).then(
       (data) => {
         data.UserInstitutionID = userInstitutionID;
         return data;
@@ -187,7 +187,7 @@ export default class SophtronClient extends SophtronBaseClient {
 
   async refreshUserInstitution(userInstitutionID: string) {
     const url = "/UserInstitution/RefreshUserInstitution";
-    return await this.post(url, { UserInstitutionID: userInstitutionID }).then(
+    return await this.postLegacy(url, { UserInstitutionID: userInstitutionID }).then(
       (data) => {
         data.UserInstitutionID = userInstitutionID;
         return data;
@@ -197,7 +197,7 @@ export default class SophtronClient extends SophtronBaseClient {
 
   async getFullAccountNumberWithinJob(accountId: string, jobId: string) {
     const url = "/UserInstitutionAccount/GetFullAccountNumberWithinJob";
-    return await this.post(url, { AccountID: accountId, JobID: jobId });
+    return await this.postLegacy(url, { AccountID: accountId, JobID: jobId });
   }
 
   ping = async () => {

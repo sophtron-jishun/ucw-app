@@ -27,6 +27,7 @@ export class AggregatorAdapterBase {
       if (this.context?.aggregator) {
         this.aggregatorAdapter = createAggregatorWidgetAdapter({
           aggregator: this.context?.aggregator as Aggregator,
+          context: this.context
         });
       }
       return true;

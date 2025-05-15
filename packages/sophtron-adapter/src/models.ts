@@ -23,6 +23,7 @@ export type AdapterDependencies = {
 
 export type AdapterConfig = {
   dependencies: AdapterDependencies;
+  sessionInfo: any
 };
 
 export type VCDependencies = Partial<AdapterDependencies>;

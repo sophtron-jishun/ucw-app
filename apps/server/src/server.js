@@ -2,6 +2,7 @@ import "dotenv/config";
 import config from "./config";
 import cookieParser from "cookie-parser";
 import express from "express";
+import cors from 'cors'
 import "express-async-errors";
 import RateLimit from "express-rate-limit";
 import path from "path";
@@ -30,7 +31,7 @@ let isReady = false;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors())
 const limiter = RateLimit({
   windowMs: 10 * 60 * 1000,
   max: 5000, // max average 500 requests per windowMs

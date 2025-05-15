@@ -41,7 +41,7 @@ export type AdapterMap = {
   dataAdapter?: Function;
   testAdapterId?: string;
   vcAdapter?: Function;
-  createWidgetAdapter: () => WidgetAdapter;
+  createWidgetAdapter: (args: {sessionInfo: any} | undefined) => WidgetAdapter;
 };
 
 export interface Credential {

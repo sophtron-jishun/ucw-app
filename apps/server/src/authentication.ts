@@ -54,7 +54,6 @@ export const tokenAuthenticationMiddleware = async (
 
   if (token) {
     const authorizationJWT = await get(redisKey);
-
     if (!authorizationJWT) {
       res.send("token invalid or expired");
       res.status(401);
@@ -68,7 +67,7 @@ export const tokenAuthenticationMiddleware = async (
 
     res.cookie(tokenCookieName, authorizationJWT, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: true,
     });
   }

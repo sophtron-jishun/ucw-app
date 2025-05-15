@@ -9,17 +9,33 @@ export default class SophtronBaseClient {
   logClient: LogClient;
   httpClient: IHttpClient;
   envConfig: Record<string, string>;
+  auth: string;
 
-  constructor(args: AdapterDependencies) {
+  constructor(args: AdapterDependencies, sessionInfo: any = null) {
     const { aggregatorCredentials, logClient, envConfig } = args;
 
     this.apiConfig = aggregatorCredentials;
     this.logClient = logClient;
     this.envConfig = envConfig;
     this.httpClient = new HttpClient(args);
+    this.auth = sessionInfo?.authorization;
   }
 
   getAuthHeaders(method: string, path: string) {
+    if(this.auth?.toLowerCase()?.startsWith('bearer ')){
+      return {Authorization: this.auth}
+    }
+    return {
+      Authorization: buildSophtronAuthCode(
+        method,
+        path,
+        this.apiConfig.clientId,
+        this.apiConfig.secret,
+      ),
+    };
+  }
+
+  getLegacyAuthHeaders(method: string, path: string) {
     return {
       Authorization: buildSophtronAuthCode(
         method,
@@ -32,11 +48,19 @@ export default class SophtronBaseClient {
 
   async post(path: string, data?: any) {
     const authHeader = this.getAuthHeaders("post", path);
+    console.log('post', authHeader)
+    return await this.httpClient.post(apiEndpoint + path, data, authHeader);
+  }
+
+  async postLegacy(path: string, data?: any) {
+    const authHeader = this.getLegacyAuthHeaders("post", path);
+    console.log('postLegacy', authHeader)
     return await this.httpClient.post(apiEndpoint + path, data, authHeader);
   }
 
   async get(path: string) {
     const authHeader = this.getAuthHeaders("get", path);
+    console.log('get', authHeader)
     return await this.httpClient.get(apiEndpoint + path, authHeader);
   }
 
