@@ -21,4 +21,6 @@ export const getSophtronAdapterMapObject = (
   } as Record<string, AdapterMap>;
 };
 
+export { testInstitutions } from "./testInstitutions";
+
 export * from "./models";

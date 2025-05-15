@@ -9,5 +9,8 @@
 
   "hiddenInstitutions": [],
 
-  "recommendedInstitutions": ["mxBank", "mxBankOauth"]
+  "recommendedInstitutions": [
+    "4685482a-573e-4903-a689-2ebcedf2c545",
+    "prodTestBankFilter"
+  ]
 }
