@@ -75,7 +75,6 @@ async function updateElasticSearchDocuments(
   polledInstitutions: CachedInstitution[],
 ) {
   const institutions = addTestInstitutions(polledInstitutions);
-
   await deleteRemovedInstitutions(institutions);
   await updateInstitutions(institutions);
 }

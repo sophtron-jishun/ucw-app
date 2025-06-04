@@ -56,6 +56,7 @@ export async function initialize() {
 
 export async function indexElasticSearch() {
   const institutionData = await getInstitutions();
+
   const insIds = institutionData.map((ins: CachedInstitution) => ins.id);
 
   await overwriteSet(INSTITUTION_CURRENT_LIST_IDS, insIds);
